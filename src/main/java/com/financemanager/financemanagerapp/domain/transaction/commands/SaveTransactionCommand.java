@@ -1,5 +1,7 @@
-package com.financemanager.financemanagerapp.domain.transaction;
+package com.financemanager.financemanagerapp.domain.transaction.commands;
 
+import com.financemanager.financemanagerapp.domain.transaction.Transaction;
+import com.financemanager.financemanagerapp.domain.transaction.repositories.TransactionRepository;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,4 +1,4 @@
-package com.financemanager.financemanagerapp.route;
+package com.financemanager.financemanagerapp.routes;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

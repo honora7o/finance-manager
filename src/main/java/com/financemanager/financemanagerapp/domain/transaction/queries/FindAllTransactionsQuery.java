@@ -1,5 +1,7 @@
-package com.financemanager.financemanagerapp.domain.transaction;
+package com.financemanager.financemanagerapp.domain.transaction.queries;
 
+import com.financemanager.financemanagerapp.domain.transaction.Transaction;
+import com.financemanager.financemanagerapp.domain.transaction.repositories.TransactionRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
