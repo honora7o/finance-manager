@@ -10,7 +10,6 @@ public class SaveTransactionCommand {
         this.transactionRepository = transactionRepository;
     }
 
-
     public void execute(Transaction transaction) {
         this.transactionRepository.save(transaction);
     }
