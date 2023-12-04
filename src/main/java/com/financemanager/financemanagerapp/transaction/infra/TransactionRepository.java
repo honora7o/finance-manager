@@ -1,5 +1,6 @@
-package com.financemanager.financemanagerapp.domain.transaction;
+package com.financemanager.financemanagerapp.transaction.infra;
 
+import com.financemanager.financemanagerapp.transaction.domain.Transaction;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
