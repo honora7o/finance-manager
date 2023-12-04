@@ -1,4 +1,4 @@
-package com.financemanager.financemanagerapp.domain.transaction;
+package com.financemanager.financemanagerapp.transaction.domain;
 
 public enum TransactionCategoryEnum {
     EDUCATION,

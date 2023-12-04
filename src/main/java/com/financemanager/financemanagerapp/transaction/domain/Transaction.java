@@ -1,4 +1,4 @@
-package com.financemanager.financemanagerapp.domain.transaction;
+package com.financemanager.financemanagerapp.transaction.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

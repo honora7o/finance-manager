@@ -1,5 +1,8 @@
-package com.financemanager.financemanagerapp.domain.transaction;
+package com.financemanager.financemanagerapp.transaction.api;
 
+import com.financemanager.financemanagerapp.transaction.application.commands.RegisterTransactionCommand;
+import com.financemanager.financemanagerapp.transaction.application.queries.FindAllTransactionsQuery;
+import com.financemanager.financemanagerapp.transaction.domain.Transaction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,11 +11,11 @@ import java.util.List;
 @RestController
 @RequestMapping("api/transactions")
 public class TransactionController {
-    private final SaveTransactionCommand createTransactionCommand;
+    private final RegisterTransactionCommand createTransactionCommand;
     private final FindAllTransactionsQuery findAllTransactionsQuery;
 
     public TransactionController(
-            SaveTransactionCommand createTransactionCommand,
+            RegisterTransactionCommand createTransactionCommand,
             FindAllTransactionsQuery findAllTransactionsQuery
     ) {
         this.createTransactionCommand = createTransactionCommand;
