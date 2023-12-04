@@ -14,6 +14,10 @@ public class TransactionRepository {
         transactions.add(transaction);
     }
 
+    public void saveAll(List<Transaction> transactions) {
+        this.transactions.addAll(transactions);
+    }
+
     public List<Transaction> findAll() {
         return this.transactions;
     }
