@@ -9,6 +9,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class RegisterTransactionCommand {
@@ -28,21 +30,27 @@ public class RegisterTransactionCommand {
     }
 
     private List<Transaction> splitTransactionIntoInstallments(Transaction transaction) {
-        List<Transaction> installments = new ArrayList<>();
-        Integer installmentAmount = transaction.installmentsTerms().get();
-        BigDecimal installmentValue = transaction.value().divide(BigDecimal.valueOf(installmentAmount), 2, RoundingMode.UNNECESSARY);
+        Integer installmentTermsAmount = getInstallmentTermsAmount(transaction);
+        BigDecimal installmentValue = getInstallmentValue(transaction);
 
-        for (int i = 0; i < installmentAmount; i++) {
-            installments.add(new Transaction(
-                    installmentValue,
-                    transaction.description() + " " + (i+1) + "/" + installmentAmount,
-                    transaction.category(),
-                    transaction.paymentType(),
-                    transaction.date().plusMonths(i),
-                    Optional.of(installmentAmount))
-            );
-        }
+        return IntStream.range(0, installmentTermsAmount)
+                .mapToObj(i -> new Transaction.TransactionBuilder()
+                        .withValue(installmentValue)
+                        // vale a pena abstrair a logica pra criar descriçao? parece giga overengineering
+                        .withDescription(transaction.description() + " " + (i + 1) + "/" + installmentTermsAmount)
+                        .withCategory(transaction.category())
+                        .withPaymentType(transaction.paymentType())
+                        .withDate(transaction.date())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
-        return installments;
+    private Integer getInstallmentTermsAmount(Transaction transaction) {
+        return transaction.installmentsTerms().get();
+    }
+
+    private BigDecimal getInstallmentValue(Transaction transaction) {
+        Integer installmentTermsAmount = getInstallmentTermsAmount(transaction);
+        return transaction.value().divide(BigDecimal.valueOf(installmentTermsAmount), 2, RoundingMode.UNNECESSARY);
     }
 }
