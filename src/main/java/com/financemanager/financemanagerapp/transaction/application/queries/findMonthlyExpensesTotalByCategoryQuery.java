@@ -22,7 +22,13 @@ public class findMonthlyExpensesTotalByCategoryQuery {
 
     public Map<String, BigDecimal> execute(TransactionCategoryEnum category, Optional<Integer> month, Optional<Integer> year) {
         LocalDate periodDate = resolveDate(month, year);
-        return groupAndSumTransactions(transactionRepository.findAll(), periodDate.getMonthValue(), periodDate.getYear(), category);
+        List<Transaction> filteredTransactions = transactionRepository.findByCategoryAndPeriod(category, periodDate.getMonthValue(), periodDate.getYear());
+
+        var result = groupAndSumTransactions(filteredTransactions, category, periodDate);
+
+        return result.isEmpty() ?
+                Map.of(buildMapKey(category, periodDate), BigDecimal.ZERO) :
+                result;
     }
 
     private LocalDate resolveDate(Optional<Integer> month, Optional<Integer> year) {
@@ -33,19 +39,16 @@ public class findMonthlyExpensesTotalByCategoryQuery {
         );
     }
 
-    private boolean isTransactionInPeriod(Transaction transaction, int month, int year, TransactionCategoryEnum category) {
-        return transaction.category() == category &&
-                transaction.date().getMonthValue() == month &&
-                transaction.date().getYear() == year;
-    }
-
-    private Map<String, BigDecimal> groupAndSumTransactions(List<Transaction> transactions, int month, int year, TransactionCategoryEnum category) {
+    private Map<String, BigDecimal> groupAndSumTransactions(List<Transaction> transactions, TransactionCategoryEnum category, LocalDate periodDate) {
         return transactions.stream()
-                .filter(transaction -> isTransactionInPeriod(transaction, month, year, category))
                 .collect(Collectors.groupingBy(
-                        transaction -> String.format("%s total expenses for the period(YYYY/MM) %d/%02d",
-                                transaction.category().toString(), year, month),
+                        transaction -> buildMapKey(transaction.category(), transaction.date()),
                         Collectors.reducing(BigDecimal.ZERO, Transaction::value, BigDecimal::add)
                 ));
+    }
+
+    private String buildMapKey(TransactionCategoryEnum category, LocalDate date) {
+        return String.format("%s total expenses for the period(YYYY/MM) %d/%02d",
+                category.toString(), date.getYear(), date.getMonthValue());
     }
 }
