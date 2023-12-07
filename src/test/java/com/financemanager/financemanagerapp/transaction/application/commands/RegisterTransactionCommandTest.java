@@ -13,6 +13,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -44,7 +45,7 @@ public class RegisterTransactionCommandTest {
         TransactionRepository mockRepository = Mockito.mock(TransactionRepository.class);
         RegisterTransactionCommand command = new RegisterTransactionCommand(mockRepository);
 
-        BigDecimal transactionValue = BigDecimal.valueOf(500.00);
+        BigDecimal transactionValue = BigDecimal.valueOf(500);
         Integer installmentTermsAmount = 2;
         Transaction transaction = new Transaction.TransactionBuilder()
                 .withValue(transactionValue)
@@ -61,5 +62,14 @@ public class RegisterTransactionCommandTest {
         verify(mockRepository).saveAll(installments);
 
         assertEquals(installments.size(), installmentTermsAmount);
+
+        IntStream.range(0, installments.size())
+                .forEach(i -> {
+                    Transaction currentInstallment = installments.get(i);
+                    assertEquals(String.format("Test Transaction %d/%d", i + 1, installmentTermsAmount),
+                            currentInstallment.description());
+                    assertEquals(transaction.value().divide(BigDecimal.valueOf(installmentTermsAmount),
+                            2, RoundingMode.UNNECESSARY), currentInstallment.value());
+                });
     }
 }
