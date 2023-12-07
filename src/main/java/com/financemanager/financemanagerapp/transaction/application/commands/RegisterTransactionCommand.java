@@ -22,12 +22,19 @@ public class RegisterTransactionCommand {
     }
 
     public void execute(Transaction transaction) {
-        if (transaction.installmentsTerms().isPresent()) {
-            List<Transaction> installments = this.splitTransactionIntoInstallments(transaction);
-            this.transactionRepository.saveAll(installments);
+        // maluquice??????
+        //(transaction.installmentsTerms().isPresent()
+        //        ? this.transactionRepository.saveAll(splitTransactionIntoInstallments(transaction))
+        //        : this.transactionRepository.save(transaction)
+        //);
+
+        if (transaction.installmentsTerms().isEmpty()) {
+            this.transactionRepository.save(transaction);
+            return;
         }
 
-        this.transactionRepository.save(transaction);
+        List<Transaction> installments = this.splitTransactionIntoInstallments(transaction);
+        this.transactionRepository.saveAll(installments);
     }
 
     private List<Transaction> splitTransactionIntoInstallments(Transaction transaction) {
