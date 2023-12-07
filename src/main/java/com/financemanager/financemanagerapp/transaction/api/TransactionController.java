@@ -42,7 +42,7 @@ public class TransactionController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/monthly-total-by-cat")
+    @GetMapping("/monthly-expenses")
     public ResponseEntity<Map<String, BigDecimal>> findMonthlyExpensesTotalByCat(
             @RequestParam(name = "category") TransactionCategoryEnum category,
             @RequestParam(name = "month", required = false) Optional<Integer> month,
