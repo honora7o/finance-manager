@@ -13,10 +13,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class findMonthlyExpensesTotalByCategoryQuery {
+public class FindMonthlyExpensesTotalByCategoryQuery {
     private final TransactionRepository transactionRepository;
 
-    public findMonthlyExpensesTotalByCategoryQuery(TransactionRepository transactionRepository) {
+    public FindMonthlyExpensesTotalByCategoryQuery(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 

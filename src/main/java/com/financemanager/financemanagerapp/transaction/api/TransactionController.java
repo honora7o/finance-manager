@@ -2,7 +2,7 @@ package com.financemanager.financemanagerapp.transaction.api;
 
 import com.financemanager.financemanagerapp.transaction.application.commands.RegisterTransactionCommand;
 import com.financemanager.financemanagerapp.transaction.application.queries.FindAllTransactionsQuery;
-import com.financemanager.financemanagerapp.transaction.application.queries.findMonthlyExpensesTotalByCategoryQuery;
+import com.financemanager.financemanagerapp.transaction.application.queries.FindMonthlyExpensesTotalByCategoryQuery;
 import com.financemanager.financemanagerapp.transaction.domain.Transaction;
 import com.financemanager.financemanagerapp.transaction.domain.TransactionCategoryEnum;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,12 @@ import java.util.Optional;
 public class TransactionController {
     private final RegisterTransactionCommand createTransactionCommand;
     private final FindAllTransactionsQuery findAllTransactionsQuery;
-    private final findMonthlyExpensesTotalByCategoryQuery findMonthlyExpensesTotalByCategoryQuery;
+    private final FindMonthlyExpensesTotalByCategoryQuery findMonthlyExpensesTotalByCategoryQuery;
 
     public TransactionController(
             RegisterTransactionCommand createTransactionCommand,
             FindAllTransactionsQuery findAllTransactionsQuery,
-            findMonthlyExpensesTotalByCategoryQuery findMonthlyExpensesTotalByCategoryQuery
+            FindMonthlyExpensesTotalByCategoryQuery findMonthlyExpensesTotalByCategoryQuery
     ) {
         this.createTransactionCommand = createTransactionCommand;
         this.findAllTransactionsQuery = findAllTransactionsQuery;
