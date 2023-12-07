@@ -25,9 +25,9 @@ public class RegisterTransactionCommand {
         if (transaction.installmentsTerms().isPresent()) {
             List<Transaction> installments = this.splitTransactionIntoInstallments(transaction);
             this.transactionRepository.saveAll(installments);
-        } else {
-            this.transactionRepository.save(transaction);
         }
+
+        this.transactionRepository.save(transaction);
     }
 
     private List<Transaction> splitTransactionIntoInstallments(Transaction transaction) {
