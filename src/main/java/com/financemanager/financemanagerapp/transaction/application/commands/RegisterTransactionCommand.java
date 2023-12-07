@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,15 +35,24 @@ public class RegisterTransactionCommand {
         BigDecimal installmentValue = getInstallmentValue(transaction);
 
         return IntStream.range(0, installmentTermsAmount)
-                .mapToObj(i -> new Transaction.TransactionBuilder()
-                        .withValue(installmentValue)
-                        // vale a pena abstrair a logica pra criar descriçao? parece giga overengineering
-                        .withDescription(transaction.description() + " " + (i + 1) + "/" + installmentTermsAmount)
-                        .withCategory(transaction.category())
-                        .withPaymentType(transaction.paymentType())
-                        .withDate(transaction.date())
-                        .build())
+                .mapToObj(i -> buildInstallment(transaction, i, installmentValue))
                 .collect(Collectors.toList());
+    }
+
+    private Transaction buildInstallment(Transaction transaction, int index, BigDecimal installmentValue) {
+        LocalDate installmentDate = transaction.date().plusMonths(index);
+
+        return new Transaction.TransactionBuilder()
+                .withValue(installmentValue)
+                .withDescription(buildInstallmentDescription(transaction, index))
+                .withCategory(transaction.category())
+                .withPaymentType(transaction.paymentType())
+                .withDate(installmentDate)
+                .build();
+    }
+
+    private String buildInstallmentDescription(Transaction transaction, int index) {
+        return String.format("%s %d/%d", transaction.description(), (index + 1), getInstallmentTermsAmount(transaction));
     }
 
     private Integer getInstallmentTermsAmount(Transaction transaction) {
