@@ -22,12 +22,6 @@ public class RegisterTransactionCommand {
     }
 
     public void execute(Transaction transaction) {
-        // maluquice??????
-        //(transaction.installmentsTerms().isPresent()
-        //        ? this.transactionRepository.saveAll(splitTransactionIntoInstallments(transaction))
-        //        : this.transactionRepository.save(transaction)
-        //);
-
         if (transaction.installmentsTerms().isEmpty()) {
             this.transactionRepository.save(transaction);
             return;
@@ -37,7 +31,7 @@ public class RegisterTransactionCommand {
         this.transactionRepository.saveAll(installments);
     }
 
-    private List<Transaction> splitTransactionIntoInstallments(Transaction transaction) {
+    protected List<Transaction> splitTransactionIntoInstallments(Transaction transaction) {
         Integer installmentTermsAmount = getInstallmentTermsAmount(transaction);
         BigDecimal installmentValue = getInstallmentValue(transaction);
 
@@ -63,7 +57,7 @@ public class RegisterTransactionCommand {
     }
 
     private Integer getInstallmentTermsAmount(Transaction transaction) {
-        return transaction.installmentsTerms().get();
+        return transaction.installmentsTerms().orElse(0);
     }
 
     private BigDecimal getInstallmentValue(Transaction transaction) {
