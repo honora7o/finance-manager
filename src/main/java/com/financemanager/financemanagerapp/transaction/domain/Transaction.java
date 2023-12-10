@@ -21,7 +21,7 @@ public record Transaction(
         private TransactionCategoryEnum category;
         private TransactionPaymentTypeEnum paymentType;
         private LocalDate date;
-        private Optional<Integer> installmentsTerms;
+        private Optional<Integer> installmentsTerms = Optional.empty();
 
         public TransactionBuilder withValue(BigDecimal value) {
             this.value = value;
@@ -48,8 +48,8 @@ public record Transaction(
             return this;
         }
 
-        public TransactionBuilder withInstallmentsTerms(Optional<Integer> installmentsTerms) {
-            this.installmentsTerms = installmentsTerms;
+        public TransactionBuilder withInstallmentsTerms(Integer installmentsTerms) {
+            this.installmentsTerms = Optional.of(installmentsTerms);
             return this;
         }
 
