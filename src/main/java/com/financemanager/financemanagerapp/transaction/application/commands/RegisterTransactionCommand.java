@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -22,12 +20,6 @@ public class RegisterTransactionCommand {
     }
 
     public void execute(Transaction transaction) {
-        // maluquice??????
-        //(transaction.installmentsTerms().isPresent()
-        //        ? this.transactionRepository.saveAll(splitTransactionIntoInstallments(transaction))
-        //        : this.transactionRepository.save(transaction)
-        //);
-
         if (transaction.installmentsTerms().isEmpty()) {
             this.transactionRepository.save(transaction);
             return;
@@ -47,7 +39,7 @@ public class RegisterTransactionCommand {
     }
 
     private Transaction buildInstallment(Transaction transaction, int index, BigDecimal installmentValue) {
-        LocalDate installmentDate = transaction.date().plusMonths(index);
+        LocalDate installmentDate = transaction.date().plusMonths(index + 1);
 
         return new Transaction.TransactionBuilder()
                 .withValue(installmentValue)
@@ -63,7 +55,7 @@ public class RegisterTransactionCommand {
     }
 
     private Integer getInstallmentTermsAmount(Transaction transaction) {
-        return transaction.installmentsTerms().get();
+        return transaction.installmentsTerms().orElse(0);
     }
 
     private BigDecimal getInstallmentValue(Transaction transaction) {
