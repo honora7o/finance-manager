@@ -24,7 +24,7 @@ public class FindMonthlyExpensesTotalByCategoryQuery {
         LocalDate periodDate = resolveDate(month, year);
         List<Transaction> filteredTransactions = transactionRepository.findByCategoryAndPeriod(category, periodDate.getMonthValue(), periodDate.getYear());
 
-        var result = groupAndSumTransactions(filteredTransactions, category, periodDate);
+        var result = groupAndSumTransactions(filteredTransactions);
 
         return result.isEmpty() ?
                 Map.of(buildMapKey(category, periodDate), BigDecimal.ZERO) :
@@ -39,7 +39,7 @@ public class FindMonthlyExpensesTotalByCategoryQuery {
         );
     }
 
-    private Map<String, BigDecimal> groupAndSumTransactions(List<Transaction> transactions, TransactionCategoryEnum category, LocalDate periodDate) {
+    private Map<String, BigDecimal> groupAndSumTransactions(List<Transaction> transactions) {
         return transactions.stream()
                 .collect(Collectors.groupingBy(
                         transaction -> buildMapKey(transaction.category(), transaction.date()),
